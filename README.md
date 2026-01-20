@@ -28,10 +28,22 @@ npm install
 cp .env.example .env
 ```
 
-3. Put your OpenAI key in `.env`:
+3. Put your Grok key in `.env` (preferred):
 
 ```env
-OPENAI_API_KEY=your_key_here
+GROK_API_KEY=your_key_here
+```
+
+Optional fallback:
+
+```env
+OPENAI_API_KEY=your_openai_key_here
+```
+
+Optional model override:
+
+```env
+LLM_MODEL=grok-3-mini
 ```
 
 ## Run
@@ -63,4 +75,3 @@ Generated files are created inside:
 - `script.js`
 
 Open `index.html` in browser to view the final clone.
-
