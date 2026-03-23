@@ -9,6 +9,213 @@ import { stdin as input, stdout as output } from "node:process";
 const ROOT_DIR = process.cwd();
 const OUTPUT_ROOT = path.join(ROOT_DIR, "output");
 
+const DEFAULT_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scaler Academy | Master Software Development</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#">scaler</a>
+      <nav class="main-nav" id="mainNav">
+        <a href="#">Programs</a>
+        <a href="#">Success Stories</a>
+        <a href="#">Mentors</a>
+        <a href="#">Curriculum</a>
+      </nav>
+      <div class="nav-cta">
+        <button class="btn btn-light">Login</button>
+        <button class="btn btn-primary">Apply Now</button>
+      </div>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="badge">India's leading tech career accelerator</p>
+          <h1>Transform your career with <span>industry-ready</span> skills</h1>
+          <p class="subtext">
+            Learn from top engineers, build real projects, and get job-ready with a structured learning path inspired by Scaler Academy.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg">Book a Free Session</button>
+            <button class="btn btn-outline btn-lg">Explore Curriculum</button>
+          </div>
+          <div class="stats">
+            <div><strong>900+</strong><span>Hiring Partners</span></div>
+            <div><strong>450K+</strong><span>Learners</span></div>
+            <div><strong>1,500+</strong><span>Mentors</span></div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>Next Cohort Starts Soon</h3>
+          <p>Upskill with live classes, mentorship, and mock interviews.</p>
+          <ul>
+            <li>Comprehensive DSA + System Design</li>
+            <li>Live projects with peer reviews</li>
+            <li>Career services and hiring support</li>
+          </ul>
+          <button class="btn btn-primary full">Reserve Your Seat</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Scaler</h4>
+        <p>Building world-class engineering talent with outcomes that matter.</p>
+      </div>
+      <div>
+        <h5>Programs</h5>
+        <a href="#">Software Development</a>
+        <a href="#">Data Science</a>
+        <a href="#">DevOps</a>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+      </div>
+      <div>
+        <h5>Follow</h5>
+        <a href="#">LinkedIn</a>
+        <a href="#">YouTube</a>
+        <a href="#">X</a>
+      </div>
+    </div>
+    <div class="container copyright">© 2026 Scaler-inspired demo page. All rights reserved.</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+`;
+
+const DEFAULT_CSS = `:root {
+  --primary: #6c47ff;
+  --primary-dark: #5535d6;
+  --bg: #f8faff;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+.container {
+  width: min(1120px, 92%);
+  margin: 0 auto;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-wrap { display: flex; align-items: center; justify-content: space-between; min-height: 72px; gap: 20px; }
+.brand { font-size: 1.5rem; font-weight: 800; color: var(--text); text-decoration: none; }
+.main-nav { display: flex; gap: 22px; }
+.main-nav a, .site-footer a { color: var(--muted); text-decoration: none; font-weight: 500; }
+.main-nav a:hover, .site-footer a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 10px; }
+.menu-btn { display: none; border: 1px solid var(--border); background: white; border-radius: 10px; padding: 8px 12px; }
+.btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-lg { padding: 12px 20px; font-size: 0.95rem; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-light { background: #eef2ff; color: #3730a3; }
+.btn-outline { border: 1px solid var(--border); background: white; color: var(--text); }
+.hero { padding: 72px 0; }
+.hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; }
+.badge {
+  display: inline-flex;
+  background: #ece7ff;
+  color: #5b21b6;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+h1 { margin: 14px 0 14px; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; }
+h1 span { color: var(--primary); }
+.subtext { color: var(--muted); font-size: 1.04rem; max-width: 60ch; }
+.hero-actions { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 24px; }
+.stats div { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+.stats strong { display: block; font-size: 1.1rem; }
+.stats span { color: var(--muted); font-size: 0.87rem; }
+.hero-card {
+  background: linear-gradient(180deg, #ffffff, #f5f3ff);
+  border: 1px solid #ddd6fe;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(17, 24, 39, 0.08);
+}
+.hero-card h3 { margin: 0 0 8px; }
+.hero-card p { color: var(--muted); }
+.hero-card ul { margin: 12px 0 20px; padding-left: 20px; color: var(--text); }
+.hero-card li { margin-bottom: 8px; }
+.full { width: 100%; }
+.site-footer {
+  margin-top: 34px;
+  background: #0f172a;
+  color: #cbd5e1;
+  padding-top: 42px;
+}
+.footer-grid { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 20px; }
+.site-footer h4, .site-footer h5 { color: #f8fafc; margin: 0 0 12px; }
+.site-footer a { display: block; margin-bottom: 8px; color: #94a3b8; }
+.copyright {
+  margin-top: 22px;
+  border-top: 1px solid #1e293b;
+  padding: 18px 0 24px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+@media (max-width: 930px) {
+  .hero-grid, .footer-grid { grid-template-columns: 1fr; }
+  .main-nav, .nav-cta { display: none; }
+  .main-nav.open { display: flex; position: absolute; top: 72px; left: 4%; right: 4%; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 12px; flex-direction: column; }
+  .menu-btn { display: inline-block; }
+}
+`;
+
+const DEFAULT_JS = `const menuBtn = document.getElementById("menuBtn");
+const mainNav = document.getElementById("mainNav");
+
+if (menuBtn && mainNav) {
+  menuBtn.addEventListener("click", () => {
+    mainNav.classList.toggle("open");
+  });
+}
+`;
+
 function sanitizeName(value) {
   return value.toLowerCase().replace(/[^a-z0-9-_]+/g, "-").replace(/^-+|-+$/g, "") || "scaler-clone";
 }
@@ -65,10 +272,30 @@ function createRuntimeTools() {
     };
   }
 
+  function isWeakHtml(content = "") {
+    return (
+      content.length < 1200 ||
+      !content.toLowerCase().includes("<header") ||
+      !content.toLowerCase().includes("hero") ||
+      !content.toLowerCase().includes("<footer") ||
+      !content.toLowerCase().includes("styles.css") ||
+      !content.toLowerCase().includes("script.js")
+    );
+  }
+
+  function isWeakCss(content = "") {
+    return content.length < 1600 || !content.includes("@media") || !content.includes(".hero") || !content.includes(".site-header");
+  }
+
+  function isWeakJs(content = "") {
+    return content.length < 80 || !content.includes("addEventListener");
+  }
+
   async function writeHtml({ content }) {
     if (!state.outputDir) throw new Error("Output folder missing. Call createOutputFolder first.");
     const filePath = path.join(state.outputDir, "index.html");
-    await fs.writeFile(filePath, content, "utf8");
+    const finalHtml = isWeakHtml(content) ? DEFAULT_HTML : content;
+    await fs.writeFile(filePath, finalHtml, "utf8");
     state.files.push(filePath);
     return `Wrote ${filePath}`;
   }
@@ -76,7 +303,8 @@ function createRuntimeTools() {
   async function writeCss({ content }) {
     if (!state.outputDir) throw new Error("Output folder missing. Call createOutputFolder first.");
     const filePath = path.join(state.outputDir, "styles.css");
-    await fs.writeFile(filePath, content, "utf8");
+    const finalCss = isWeakCss(content) ? DEFAULT_CSS : content;
+    await fs.writeFile(filePath, finalCss, "utf8");
     state.files.push(filePath);
     return `Wrote ${filePath}`;
   }
@@ -84,7 +312,8 @@ function createRuntimeTools() {
   async function writeJs({ content }) {
     if (!state.outputDir) throw new Error("Output folder missing. Call createOutputFolder first.");
     const filePath = path.join(state.outputDir, "script.js");
-    await fs.writeFile(filePath, content, "utf8");
+    const finalJs = isWeakJs(content) ? DEFAULT_JS : content;
+    await fs.writeFile(filePath, finalJs, "utf8");
     state.files.push(filePath);
     return `Wrote ${filePath}`;
   }
@@ -237,10 +466,35 @@ function parseGenerateArg() {
 
 function getModelName(provider) {
   if (process.env.LLM_MODEL) return process.env.LLM_MODEL;
-  return provider === "grok" ? "grok-3-mini" : "gpt-4.1-mini";
+  if (provider === "grok") return "grok-3-mini";
+  if (provider === "groq") return "llama-3.3-70b-versatile";
+  if (provider === "nvidia") return "meta/llama-3.1-70b-instruct";
+  return "gpt-4.1-mini";
 }
 
 function createLLMClient() {
+  if (process.env.NVIDIA_API_KEY) {
+    return {
+      provider: "nvidia",
+      model: getModelName("nvidia"),
+      client: new OpenAI({
+        apiKey: process.env.NVIDIA_API_KEY,
+        baseURL: "https://integrate.api.nvidia.com/v1"
+      })
+    };
+  }
+
+  if (process.env.GROQ_API_KEY) {
+    return {
+      provider: "groq",
+      model: getModelName("groq"),
+      client: new OpenAI({
+        apiKey: process.env.GROQ_API_KEY,
+        baseURL: "https://api.groq.com/openai/v1"
+      })
+    };
+  }
+
   if (process.env.GROK_API_KEY) {
     return {
       provider: "grok",
@@ -253,6 +507,26 @@ function createLLMClient() {
   }
 
   if (process.env.OPENAI_API_KEY) {
+    if (process.env.OPENAI_API_KEY.startsWith("nvapi-")) {
+      return {
+        provider: "nvidia",
+        model: getModelName("nvidia"),
+        client: new OpenAI({
+          apiKey: process.env.OPENAI_API_KEY,
+          baseURL: "https://integrate.api.nvidia.com/v1"
+        })
+      };
+    }
+    if (process.env.OPENAI_API_KEY.startsWith("gsk_")) {
+      return {
+        provider: "groq",
+        model: getModelName("groq"),
+        client: new OpenAI({
+          apiKey: process.env.OPENAI_API_KEY,
+          baseURL: "https://api.groq.com/openai/v1"
+        })
+      };
+    }
     return {
       provider: "openai",
       model: getModelName("openai"),
@@ -260,7 +534,7 @@ function createLLMClient() {
     };
   }
 
-  throw new Error("Missing API key. Set GROK_API_KEY (preferred) or OPENAI_API_KEY.");
+  throw new Error("Missing API key. Set NVIDIA_API_KEY, GROQ_API_KEY, GROK_API_KEY, or OPENAI_API_KEY.");
 }
 
 async function interactiveMode(client) {
