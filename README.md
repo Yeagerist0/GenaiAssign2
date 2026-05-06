@@ -28,9 +28,12 @@ npm install
 cp .env.example .env
 ```
 
-3. Put your Grok key in `.env` (preferred):
+3. Put your API key in `.env`:
 
 ```env
+GEMINI_API_KEY=your_gemini_key_here
+NVIDIA_API_KEY=your_nvapi_key_here
+GROQ_API_KEY=your_groq_key_here
 GROK_API_KEY=your_key_here
 ```
 
@@ -43,6 +46,9 @@ OPENAI_API_KEY=your_openai_key_here
 Optional model override:
 
 ```env
+LLM_MODEL=gemini-2.0-flash
+LLM_MODEL=meta/llama-3.1-70b-instruct
+LLM_MODEL=llama-3.3-70b-versatile
 LLM_MODEL=grok-3-mini
 ```
 
