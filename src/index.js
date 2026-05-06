@@ -160,7 +160,7 @@ Rules:
 `;
 }
 
-async function runAgentTask(userInstruction, client) {
+async function runAgentTask(userInstruction, client, model) {
   const { toolMap } = createRuntimeTools();
   const messages = [
     { role: "system", content: buildSystemPrompt() },
@@ -174,7 +174,7 @@ async function runAgentTask(userInstruction, client) {
 
   for (let i = 0; i < 20; i += 1) {
     const response = await client.chat.completions.create({
-      model: "gpt-4.1-mini",
+      model,
       messages,
       temperature: 0.4
     });
@@ -235,6 +235,34 @@ function parseGenerateArg() {
   return process.argv[idx + 1] || "";
 }
 
+function getModelName(provider) {
+  if (process.env.LLM_MODEL) return process.env.LLM_MODEL;
+  return provider === "grok" ? "grok-3-mini" : "gpt-4.1-mini";
+}
+
+function createLLMClient() {
+  if (process.env.GROK_API_KEY) {
+    return {
+      provider: "grok",
+      model: getModelName("grok"),
+      client: new OpenAI({
+        apiKey: process.env.GROK_API_KEY,
+        baseURL: "https://api.x.ai/v1"
+      })
+    };
+  }
+
+  if (process.env.OPENAI_API_KEY) {
+    return {
+      provider: "openai",
+      model: getModelName("openai"),
+      client: new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    };
+  }
+
+  throw new Error("Missing API key. Set GROK_API_KEY (preferred) or OPENAI_API_KEY.");
+}
+
 async function interactiveMode(client) {
   const rl = readline.createInterface({ input, output });
   console.log("AI Agent CLI (Assignment 02)");
@@ -246,21 +274,18 @@ async function interactiveMode(client) {
       rl.close();
       break;
     }
-    await runAgentTask(prompt, client);
+    await runAgentTask(prompt, client.client, client.model);
   }
 }
 
 async function main() {
-  if (!process.env.OPENAI_API_KEY) {
-    console.error("Missing OPENAI_API_KEY in environment.");
-    process.exit(1);
-  }
   await fs.mkdir(OUTPUT_ROOT, { recursive: true });
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const client = createLLMClient();
+  console.log(`Using provider: ${client.provider}, model: ${client.model}`);
 
   const oneShotPrompt = parseGenerateArg();
   if (oneShotPrompt) {
-    await runAgentTask(oneShotPrompt, client);
+    await runAgentTask(oneShotPrompt, client.client, client.model);
     return;
   }
   await interactiveMode(client);
