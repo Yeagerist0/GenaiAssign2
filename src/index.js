@@ -469,10 +469,22 @@ function getModelName(provider) {
   if (provider === "grok") return "grok-3-mini";
   if (provider === "groq") return "llama-3.3-70b-versatile";
   if (provider === "nvidia") return "meta/llama-3.1-70b-instruct";
+  if (provider === "gemini") return "gemini-2.0-flash";
   return "gpt-4.1-mini";
 }
 
 function createLLMClient() {
+  if (process.env.GEMINI_API_KEY) {
+    return {
+      provider: "gemini",
+      model: getModelName("gemini"),
+      client: new OpenAI({
+        apiKey: process.env.GEMINI_API_KEY,
+        baseURL: "https://generativelanguage.googleapis.com/v1beta/openai"
+      })
+    };
+  }
+
   if (process.env.NVIDIA_API_KEY) {
     return {
       provider: "nvidia",
@@ -507,6 +519,16 @@ function createLLMClient() {
   }
 
   if (process.env.OPENAI_API_KEY) {
+    if (process.env.OPENAI_API_KEY.startsWith("AIza")) {
+      return {
+        provider: "gemini",
+        model: getModelName("gemini"),
+        client: new OpenAI({
+          apiKey: process.env.OPENAI_API_KEY,
+          baseURL: "https://generativelanguage.googleapis.com/v1beta/openai"
+        })
+      };
+    }
     if (process.env.OPENAI_API_KEY.startsWith("nvapi-")) {
       return {
         provider: "nvidia",
@@ -534,7 +556,7 @@ function createLLMClient() {
     };
   }
 
-  throw new Error("Missing API key. Set NVIDIA_API_KEY, GROQ_API_KEY, GROK_API_KEY, or OPENAI_API_KEY.");
+  throw new Error("Missing API key. Set GEMINI_API_KEY, NVIDIA_API_KEY, GROQ_API_KEY, GROK_API_KEY, or OPENAI_API_KEY.");
 }
 
 async function interactiveMode(client) {
